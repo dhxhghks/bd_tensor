@@ -1,0 +1,174 @@
+
+bd_gui.py,1233
+class DrawingArea(gui.Widget):DrawingArea23,468
+    def __init__(this, width, height):__init__24,499
+    def paint(this, surf):paint28,660
+class TestDialog(gui.Dialog):TestDialog31,732
+    def __init__(this):__init__32,762
+class MainGui(gui.Desktop):MainGui37,938
+    boardAreaHeight = board.WINDOWHEIGHTboardAreaHeight38,966
+    boardArea = NoneboardArea39,1007
+    bottomArea = NonebottomArea40,1028
+    rightArea = NonerightArea41,1050
+    engine = Noneengine42,1071
+    def __init__(self, disp, game):__init__44,1090
+    def setup_bottom(self):setup_bottom70,1959
+    def back_space(self):back_space98,2832
+    def navi_action(self):navi_action101,2872
+    def seq_tf_activate(self):seq_tf_activate111,3246
+    def get_render_area(self):get_render_area115,3356
+    def status_changed(self):status_changed118,3433
+    def event(self, e):event125,3686
+    def terminate(self):terminate129,3854
+    disp = pygame.display.set_mode((922, 1152))    disp135,4009
+    g = bd.GameCtl()g137,4062
+    main_gui = MainGui(disp, game = g)main_gui141,4119
+    human = Human(g, main_gui)human145,4363
+    dlbot = DlBot(g)dlbot146,4394
+    eng = LocalGameEngine(main_gui = main_gui)eng151,4493
+
+bd.py,1940
+class GameMode(enum.Enum):GameMode22,429
+    GAME = 1GAME23,456
+    GIBO = 2GIBO24,469
+    EXERCISE = 3EXERCISE25,482
+class GameCtl(gui.Widget):GameCtl27,503
+    def __init__(self, **params):__init__28,530
+    def getSize(self):getSize49,1197
+    def setSize(self, size):setSize52,1241
+    def getChilds(self, localid):getChilds55,1296
+    def getParent(self, localid):getParent58,1453
+    def diverge(self, localid, current_seq):diverge67,1759
+    def fork(self, localid, current_seq):fork93,2670
+    def delete(self, n):delete112,3420
+    def changeLocalid(self, localid):changeLocalid118,3647
+    def getStonesByLocalid(self, localid):getStonesByLocalid138,4365
+    def getCurrentStones(self):getCurrentStones141,4452
+    def getStonesBySeq(self, seq):getStonesBySeq147,4687
+    def getLocalids(self):getLocalids151,4790
+    def setSeq(self, seq):setSeq154,4871
+    def getSeq(self):getSeq162,5154
+    def getLastSeq(self):getLastSeq165,5230
+    def setGameMode(self, mode):setGameMode168,5314
+    def setBW(self, bw):setBW171,5373
+    def getBW(self):getBW174,5420
+    def back(self):back177,5465
+    def move_silently(self, point):move_silently191,5849
+    def move_silently_post(self):move_silently_post198,6153
+    def move(self, point):move209,6573
+    def check(self, x, y, bw):check246,7734
+    def new(self, localid='00'):new252,7891
+    def save(self, file_path):save263,8267
+    def loadSeqFromMongo(self, arry):loadSeqFromMongo286,8976
+    def loadSeq(self, file_path):loadSeq306,9629
+    def load(self, file_path):load328,10349
+    def detect(self, file):detect345,10940
+    def readSgf(self, file_path):readSgf356,11325
+    def setPlayer(self, black_player, white_player):setPlayer367,11678
+    def play(self):play371,11814
+    def play_black(self):play_black374,11848
+    def play_white(self):play_white379,12015
+    g = GameCtl()g385,12232
+
+board.py,1027
+BLACK = (  0,   0,   0)BLACK6,114
+WHITE = (255, 255, 255)WHITE7,138
+BLUE =  (  0,   0, 255)BLUE8,162
+GREEN = (  0, 255,   0)GREEN9,186
+RED =   (255,   0,   0)RED10,210
+FPS = 30FPS12,235
+WINDOWWIDTH = 922WINDOWWIDTH13,244
+WINDOWHEIGHT = 922WINDOWHEIGHT14,262
+class board(gui.Widget):board16,282
+    def __init__(self, size, width, height, **params):__init__17,307
+    def init(self):init55,1456
+    def paint(self, s):paint64,1746
+    def event(self, e):event77,2065
+    def resize(self, width=None, height=None):resize80,2103
+    def drawBoard(self):drawBoard83,2190
+    def drawStoneLayer(self):drawStoneLayer108,3624
+    def drawStones(self):drawStones122,4304
+    def drawStone(self, x, y, bw):drawStone128,4495
+    def getLocation(self, x, y):getLocation142,4982
+    def getPoint(self, left, top):getPoint150,5346
+    def checkForQuit(self):checkForQuit160,5679
+    def terminate(self):terminate168,6124
+    def start(self):start172,6191
+    p = board(19, 640, 640)p194,6918
+
+bot.py,410
+class Bot:Bot10,152
+    def __init__(self, game_state):__init__11,163
+    def select_move(self):select_move14,237
+class Human(Bot):Human17,278
+    def __init__(self, game, gui):__init__18,296
+    async def select_move(self, game_state):select_move22,388
+class DlBot(Bot):DlBot41,1064
+    def __init__(self, game):__init__42,1082
+    async def select_move(self, game_state):select_move46,1220
+
+converter.py,194
+model = tf.keras.models.load_model("./betago.hdf5")model5,103
+converter = tf.lite.TFLiteConverter.from_keras_model(model)converter6,155
+tflite_model = converter.convert()tflite_model7,215
+
+gameengine.py,303
+class LocalGameEngine(object):LocalGameEngine11,243
+    def __init__(self, main_gui):__init__12,274
+    def pause(self):pause30,816
+    def resume(self):resume33,865
+    def render(self, dest, rect):render36,916
+    async def run(self):run47,1190
+    def update_ui(self):update_ui106,3521
+
+play_local.py,739
+class LocalGtpBot:LocalGtpBot20,594
+    def __init__(self, go_bot, termination=None, handicap=0,__init__22,614
+    def opponent_cmd(opponent):opponent_cmd45,1544
+    def send_command(self, cmd):send_command60,2171
+    def get_response(self):get_response64,2301
+    def command_and_response(self, cmd):command_and_response76,2685
+    def run(self):run82,2846
+    def set_handicap(self):set_handicap88,2995
+    def play(self):play103,3657
+    def play_our_move(self):play_our_move116,4094
+    def play_their_move(self):play_their_move135,4844
+    bot = load_prediction_agent(h5py.File("./agents/betago.hdf5", "r"))bot155,5706
+    gnu_go = LocalGtpBot(go_bot=bot, termination=PassWhenOpponentPasses(),gnu_go156,5778
+
+universe.py,1606
+class Stone:Stone5,25
+    def __init__(self, point, bw):__init__6,38
+    def getPoint(self):getPoint11,147
+    def getBW(self):getBW14,198
+    def __eq__(self, other):__eq__17,243
+    def __repr__(self):__repr__22,362
+class Array2d:Array2d26,473
+    def __init__(self, size=19):__init__27,488
+    def getIndex(self):getIndex50,1155
+    def setIndex(self, i):setIndex53,1206
+    def getItem(self, x, y):getItem57,1302
+    def addItem(self, p, color):addItem60,1364
+    def deleteLast(self):deleteLast68,1572
+    def delItem(self, p):delItem73,1737
+    def getSeq(self):getSeq76,1801
+    def getCnt(self):getCnt86,2028
+    def __repr__(self):__repr__89,2075
+class Universe:Universe92,2130
+    def __init__(self, size = 19, localid=None, stones=None):__init__97,2267
+    def getSeq(self):getSeq118,2932
+    def setSeq(self, seq):setSeq121,2979
+    def getLastSeq(self):getLastSeq124,3030
+    def getCurrentEpoch(self):getCurrentEpoch127,3104
+    def setCurrentEpoch(self, epoch):setCurrentEpoch130,3178
+    def getStones(self, seq=None):getStones133,3252
+    def setStones(self, stones):setStones160,4064
+    def stepForward(self, p, bw):stepForward192,5065
+    def stepBackward(self):stepBackward206,5578
+    def getStatus(self, seq=None):getStatus213,5794
+    def setStatus(self, seq, status):setStatus222,6106
+    def check_capture(self, x, y, bw):check_capture228,6290
+    def check(self, p, bw):check266,7748
+    def isBlocked(self, p, bw):isBlocked296,8900
+    st1 = Stone((1,1),'w')st1324,9783
+    st2 = Stone((1,2),'b')st2325,9810
